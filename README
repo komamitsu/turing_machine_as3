@@ -1,0 +1,7 @@
+This is the simple turing machine sample written in ActionScript. It can do multiplication using /1+x1+/ format.
+
+If you want to compile this one, type the command below.
+
+  $ mxmlc TuringMachine.as
+
+

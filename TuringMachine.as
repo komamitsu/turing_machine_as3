@@ -15,33 +15,40 @@ package {
         private var val1:TextField;
         private var val2:TextField;
         private var run:TextField;
+        private var speed:TextField;
         private const input_x:int = 20;
         private const input_y:int = 30;
         private const tape_x:int = 100;
         private const tape_y:int = 100;
-        private const stat_x:int = 250;
+        private const stat_x:int = 300;
         private const stat_y:int = 0;
         private const msg_x:int = 20;
         private const msg_y:int = 0;
+        private const speed_x:int = 20;
+        private const speed_y:int = 60;
 
         public function TuringMachine() {
             setStat();
 
             addChild(createTextField(tape_x + 10, tape_y - 10, '▼'));
 
+            addChild(createTextField(speed_x, speed_y, 'なんmsecごとに動くの?'));
+            addChild(speed = createTextField(speed_x + 150, speed_y, '1000', 4));
+
             addChild(createTextField(input_x, input_y, 'なに掛けるなに?'));
-            addChild(val1 = createTextField(input_x + 100, input_y, '3', true));
+            addChild(val1 = createTextField(input_x + 100, input_y, '3', 1));
             addChild(createTextField(input_x + 115, input_y, 'x'));
-            addChild(val2 = createTextField(input_x + 130, input_y, '2', true));
+            addChild(val2 = createTextField(input_x + 130, input_y, '2', 1));
 
             addChild(run = 
-                createTextField(input_x + 100, input_y + 30, 'かけざん開始！')
+                createTextField(input_x + 150, input_y, 'かけざん開始！')
             );
             run.border = true;
             run.addEventListener('click', 
                 function (event:Event):void {
                     init();
-                    timer = new Timer(400);
+                    if (timer) timer.stop();
+                    timer = new Timer(parseInt(speed.text));
                     timer.addEventListener(TimerEvent.TIMER, process);
                     timer.start();
                 }
@@ -74,18 +81,18 @@ package {
         }
 
         private function createTextField(
-            x:int, y:int, content:String, input:Boolean = false
+            x:int, y:int, content:String, inputLen:int = 0 
         ):TextField {
             var tf:TextField = new TextField();
             tf.x = x;
             tf.y = y;
             tf.text = content;
             tf.autoSize = TextFieldAutoSize.LEFT;
-            if (input) {
+            if (inputLen > 0) {
                 tf.type = TextFieldType.INPUT;
                 tf.background = true;
                 tf.restrict = "0-9";
-                tf.maxChars = 1;
+                tf.maxChars = inputLen;
             }
             return tf;
         }
